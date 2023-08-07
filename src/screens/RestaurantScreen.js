@@ -7,17 +7,29 @@ import {
   StatusBar,
   ScrollView,
 } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {themeColors} from '../theme';
 import DishRow from '../components/dishRow';
 import CartIcon from '../components/cartIcon';
+import {useDispatch} from "react-redux"
+import { setResturant } from '../redux/restaurentSlice';
+// import { setRestaurent } from '../redux/restaurentSlice';
+
 
 const RestaurantScreen = () => {
   const navigation = useNavigation();
   const {params} = useRoute();
   let item = params;
+  const dispatch = useDispatch()
   // console.log(item)
+
+  useEffect(()=>{
+    if(item && item.id){
+      dispatch(setResturant({...item}))
+    }
+  })
+
 
   return (
     <View style={{}}>

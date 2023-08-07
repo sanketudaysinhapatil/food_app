@@ -10,10 +10,13 @@ import React from 'react';
 import {featured} from '../constants';
 import {themeColors} from '../theme';
 import {useNavigation} from '@react-navigation/native';
+import {useSelector} from "react-redux"
+import { selectResturant } from '../redux/restaurentSlice';
 
 const CartScreen = () => {
   const restaurant = featured.restaurants[0];
   const navigation = useNavigation();
+  const restaurent = useSelector(selectResturant )
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
       {/* back butto  */}
@@ -64,7 +67,7 @@ const CartScreen = () => {
         }}>
         <Image
           style={{width: 80, height: 80}}
-          source={require('../assets/images/bike.png')}
+          source={require('../assets/images/b3.png')}
         />
         <Text style={{flex: 1, paddingLeft: 16, color: 'black'}}>
           Deliver in 20-30 minutes
