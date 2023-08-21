@@ -6,13 +6,24 @@ import MapView, {Marker} from 'react-native-maps';
 import {themeColors} from '../theme';
 // import { Image } from 'react-native-feather';
 // import MapView from 'react-native-maps';
-import {useSelector}  from "react-redux"
+import {useDispatch, useSelector} from 'react-redux';
+import { selectResturant } from '../redux/restaurentSlice';
+import { emptyBasket } from '../redux/basketSlice';
 
 const Delivery = () => {
- 
-  console.log(resturant.lat);
+  const dispatch = useDispatch()
   const navigation = useNavigation();
-  const restaurent = useSelector(state => state.restaurant.restaurant )
+  const resturant = useSelector(selectResturant);
+  const tokyoRegion = {
+    latitude: 35.6762,
+    longitude: 139.6503,
+    latitudeDelta: 0.01,
+    longitudeDelta: 0.01,
+  };
+  const cancelOrder = ()=>{
+    navigation.navigate('Home')
+    dispatch(emptyBasket())
+  }
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
       {/* map view  */}
@@ -99,7 +110,7 @@ const Delivery = () => {
               style={{height: 64, width: 64, borderRadius: 50}}
               source={require('../assets/images/deliveryGuy.png')}
             />
-            <View style={{marginLeft: 12, flex:1}}>
+            <View style={{marginLeft: 12, flex: 1}}>
               <Text style={{fontWeight: 'bold', color: 'white', fontSize: 19}}>
                 Sanket Patil
               </Text>
@@ -114,14 +125,13 @@ const Delivery = () => {
                 alignItems: 'center',
                 marginRight: 12,
                 marginLeft: 12,
-                
               }}>
               <TouchableOpacity
                 style={{
                   backgroundColor: 'white',
                   padding: 8,
                   borderRadius: 50,
-                  marginRight:10
+                  marginRight: 10,
                 }}>
                 <Image
                   tintColor={themeColors.bgColor(1)}
@@ -131,15 +141,17 @@ const Delivery = () => {
               </TouchableOpacity>
 
               <TouchableOpacity
+             
                 style={{
                   backgroundColor: 'white',
                   padding: 8,
                   borderRadius: 50,
-                  
                 }}
-                onPress={()=>navigation.navigate("Home")}>
+                onPress={() =>
+                 cancelOrder()
+                }>
                 <Image
-                  tintColor={"#CC2C24"}
+                  tintColor={'#CC2C24'}
                   source={require('../assets/icons/cancel.png')}
                   style={{height: 22, width: 22}}
                 />

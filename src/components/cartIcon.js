@@ -2,9 +2,14 @@ import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {themeColors} from '../theme';
 import {useNavigation} from '@react-navigation/native';
+import { useSelector } from 'react-redux';
+import { selectBasketItems, selectBasketTotal } from '../redux/basketSlice';
 
 const CartIcon = () => {
   const navigation = useNavigation();
+  const cartItems = useSelector(selectBasketItems)
+  const carttotal = useSelector(selectBasketTotal)
+  if(!cartItems.length) return
   return (
     <View
       style={{
@@ -33,7 +38,7 @@ const CartIcon = () => {
             backgroundColor: 'rgba(255, 255, 255, 0.3)',
           }}>
           <Text style={{fontWeight: 'bold', color: 'white', fontSize: 19}}>
-            3
+            {cartItems.length}
           </Text>
         </View>
         <Text
@@ -47,7 +52,7 @@ const CartIcon = () => {
           View Cart
         </Text>
         <Text style={{fontWeight: 'bold', fontSize: 20, color: 'white'}}>
-          ${23}
+          ${carttotal}
         </Text>
       </TouchableOpacity>
     </View>

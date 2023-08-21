@@ -1,13 +1,11 @@
-import {configureStore} from "@reduxjs/toolkit"
-// import cartSlice from "./cartSlice"
+import { configureStore } from '@reduxjs/toolkit'
+import basketSlice from './basketSlice'
+import restaurentSlice from './restaurentSlice'
 
-import restaurentSlice from "./restaurentSlice"
-import { basketSlice } from "./cartSlice"
 
 export const store = configureStore({
-    reducer:{
-        cart :basketSlice,
-        restaurent : restaurentSlice
-
-    }
+  reducer: {
+    basket: basketSlice,
+    resturant: restaurentSlice
+  },
 })

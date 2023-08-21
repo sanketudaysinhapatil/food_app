@@ -7,39 +7,65 @@ import {
   StatusBar,
   ScrollView,
 } from 'react-native';
-import React, { useEffect } from 'react';
+import React, { useEffect, useLayoutEffect } from 'react';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {themeColors} from '../theme';
 import DishRow from '../components/dishRow';
 import CartIcon from '../components/cartIcon';
-import {useDispatch} from "react-redux"
-import { setResturant } from '../redux/restaurentSlice';
+import {useDispatch, useSelector} from "react-redux"
+import { selectResturant, setResturant } from '../redux/restaurentSlice';
+import { emptyBasket } from '../redux/basketSlice';
 // import { setRestaurent } from '../redux/restaurentSlice';
+
 
 
 const RestaurantScreen = () => {
   const navigation = useNavigation();
-  const {params} = useRoute();
-  let item = params;
-  const dispatch = useDispatch()
-  // console.log(item)
-
-  useEffect(()=>{
-    if(item && item.id){
-      dispatch(setResturant({...item}))
-    }
-  })
+    const resturant = useSelector(selectResturant);
+    let dispatch = useDispatch();
+    const {params: {
+        id, 
+        title,
+        imgUrl,
+        rating,
+        type,
+        address, 
+        description,
+        dishes,
+        lng,
+        lat
+    }} = useRoute();
+    useLayoutEffect(()=>{
+        navigation.setOptions({headerShown: false})
+    },[])
+    useEffect(()=>{
+        if(resturant && resturant.id!=id){
+            dispatch(emptyBasket());
+        }
+        dispatch(setResturant({
+            id, 
+            title,
+            imgUrl,
+            rating,
+            type,
+            address, 
+            description,
+            dishes,
+            lng,
+            lat
+        }))
+    },[])
 
 
   return (
-    <View style={{}}>
+    <View style={{flex:1, backgroundColor:"white"}}>
       <StatusBar style="Light"/>
       
       <CartIcon/>
 
       <ScrollView>
         <View style={{position: 'relative'}}>
-          <Image source={item.image} style={{width: '100%', height: 288}} />
+          <Image source={resturant.image} style={{width: '100%', height: 288}} />
           <TouchableOpacity
             style={{
               position: 'absolute',
@@ -67,7 +93,7 @@ const RestaurantScreen = () => {
           }}>
           <View style={{paddingHorizontal: 20}}>
             <Text style={{fontSize: 26, color: 'black', fontWeight: 'bold'}}>
-              {item.name}
+              {resturant.name}
             </Text>
             <View
               style={{
@@ -85,11 +111,11 @@ const RestaurantScreen = () => {
                   source={require('../assets/images/s.png')}
                   style={{height: 16, width: 16}}
                 />
-                <Text style={{color: 'rgb(209 213 219)'}}>{item.stars}</Text>
+                <Text style={{color: 'rgb(209 213 219)'}}>{resturant.stars}</Text>
                 <Text style={{color: 'rgb(209 213 219)'}}>
-                  ({item.review} review ) .{' '}
+                  ({resturant.review} review ) .{' '}
                   <Text style={{fontWeight: '600', color: 'black'}}>
-                    {item.category}
+                    {resturant.category}
                   </Text>
                 </Text>
               </View>
@@ -105,12 +131,12 @@ const RestaurantScreen = () => {
                   tintColor="gray"
                 />
                 <Text style={{color: 'rgb(209 213 219)'}}>
-                  Nearby . {item.address}
+                  Nearby . {resturant.address}
                 </Text>
               </View>
             </View>
             <Text style={{marginTop: 8, color: 'rgb(107 114 128)'}}>
-              {item.description}
+              {resturant.description}
             </Text>
           </View>
         </View>
@@ -126,7 +152,7 @@ const RestaurantScreen = () => {
           </Text>
           {/* dishesh  */}
 
-          {item.dishes.map((dish, index) => 
+          {resturant?.dishes?.map((dish, index) => 
             <DishRow key={index} item={{...dish}}/>
           )}
         </View>

@@ -6,17 +6,35 @@ import {
   Image,
   View,
 } from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {featured} from '../constants';
 import {themeColors} from '../theme';
 import {useNavigation} from '@react-navigation/native';
-import {useSelector} from "react-redux"
+import {useDispatch, useSelector} from "react-redux"
 import { selectResturant } from '../redux/restaurentSlice';
-
+import { removeFromBasket, selectBasketItems, selectBasketTotal } from '../redux/basketSlice';
+const deliveryFee = 2
 const CartScreen = () => {
-  const restaurant = featured.restaurants[0];
+  const [groupedItem , setGroupedItems ] = useState({})
+  const restaurant = useSelector(selectResturant)
   const navigation = useNavigation();
-  const restaurent = useSelector(selectResturant )
+const cartItems = useSelector(selectBasketItems)
+  const carttotal = useSelector(selectBasketTotal)
+  const dispatch = useDispatch()
+  
+useEffect(()=>{
+  const items = cartItems.reduce((group,item )=>{
+    if (group[item.id]){
+      group[item.id].push(item)
+    }else{
+      group[item.id]= [item]
+    }
+    return group
+  },{})
+  setGroupedItems(items)
+
+},[cartItems])
+
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
       {/* back butto  */}
@@ -87,10 +105,11 @@ const CartScreen = () => {
           backgroundColor: 'white',
           paddingTop: 20,
         }}>
-        {restaurant.dishes.map((dish, index) => {
+        {Object.entries(groupedItem).map(([key, items]) => {
+          let dish = items[0]
           return (
             <View
-              key={index}
+              key={key}
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
@@ -109,7 +128,7 @@ const CartScreen = () => {
                   marginRight: 5,
                   fontWeight: 'bold',
                 }}>
-                2 X
+                {items.length} X
               </Text>
               <Image
                 source={dish.image}
@@ -138,7 +157,9 @@ const CartScreen = () => {
                   borderRadius: 60,
                   backgroundColor: themeColors.bgColor(1),
                   marginLeft: 5,
-                }}>
+                }}
+                onPress={()=>dispatch(removeFromBasket({id:dish.id}))}
+                >
                 <Text
                   style={{color: 'white', fontSize: 16, fontWeight: 'bold'}}>
                   {'  '}-{'  '}
@@ -160,19 +181,19 @@ const CartScreen = () => {
         }}>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <Text style={{color: 'rgb(55 65 81)'}}>Subtotal</Text>
-          <Text style={{color: 'rgb(55 65 81)'}}>$20</Text>
+          <Text style={{color: 'rgb(55 65 81)'}}>${carttotal}</Text>
         </View>
 
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <Text style={{color: 'rgb(55 65 81)'}}>Delivery Fee</Text>
-          <Text style={{color: 'rgb(55 65 81)'}}>$2</Text>
+          <Text style={{color: 'rgb(55 65 81)'}}>${deliveryFee}</Text>
         </View>
 
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <Text style={{color: 'rgb(55 65 81)', fontWeight: 'bold'}}>
             Order Total
           </Text>
-          <Text style={{color: 'rgb(55 65 81)', fontWeight: 'bold'}}>$30</Text>
+          <Text style={{color: 'rgb(55 65 81)', fontWeight: 'bold'}}>${carttotal+deliveryFee}</Text>
         </View>
         <TouchableOpacity
           style={{
