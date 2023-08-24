@@ -93,7 +93,7 @@ const Home = () => {
 
             <View style={{marginTop:20}}>
               {
-                [featured,featured, featured].map((item,index)=>{
+                featured.map((item,index)=>{
                   return(
                     <FeaturedRow key={index} title={item.title} restaurants={item.restaurants} description={item.description}/>
                   )

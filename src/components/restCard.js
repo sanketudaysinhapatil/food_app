@@ -10,8 +10,11 @@ import {themeColors} from '../theme';
 import {useNavigation} from '@react-navigation/native';
 
 const RestCard = ({item}) => {
-  // console.log("======",item.address)
+  console.log(item)
+  console.log("======",item.name)
   const navigation = useNavigation();
+  
+  
   return (
     <TouchableWithoutFeedback
       onPress={() => navigation.navigate('Restaurant', {...item})}>
@@ -32,12 +35,13 @@ const RestCard = ({item}) => {
             width: 256,
           }}>
           <Image
-            source={item.image}
+            source = {item.image}
             style={{
               height: '100%',
               width: '100%',
               borderTopLeftRadius: 20,
               borderTopRightRadius: 20,
+              objectFit:"contain"
             }}
           />
         </View>
@@ -60,7 +64,7 @@ const RestCard = ({item}) => {
             }}>
             <Image
               source={require('../assets/images/s.png')}
-              style={{height: 16, width: 16}}
+              style={{height: 16, width: 16, tintColor:"gray" ,opacity:0.5}}
             />
             <Text style={{color: 'rgb(209 213 219)'}}>{item.stars}</Text>
             <Text style={{color: 'rgb(209 213 219)'}}>

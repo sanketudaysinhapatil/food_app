@@ -43,7 +43,7 @@ const FeaturedRow = ({title, description, restaurants}) => {
         }}>
        
         {restaurants.map((restaurant, index) => {
-          return <RestCard key={index} item={restaurant} />;
+          return <RestCard key={index} item={restaurant}  />;
         })}
       </ScrollView>
     </View>

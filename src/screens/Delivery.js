@@ -9,14 +9,15 @@ import {themeColors} from '../theme';
 import {useDispatch, useSelector} from 'react-redux';
 import { selectResturant } from '../redux/restaurentSlice';
 import { emptyBasket } from '../redux/basketSlice';
+import call from 'react-native-phone-call'
 
 const Delivery = () => {
   const dispatch = useDispatch()
   const navigation = useNavigation();
   const resturant = useSelector(selectResturant);
   const tokyoRegion = {
-    latitude: 35.6762,
-    longitude: 139.6503,
+    latitude:18.963577,
+    longitude: 72.818344,
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   };
@@ -24,6 +25,17 @@ const Delivery = () => {
     navigation.navigate('Home')
     dispatch(emptyBasket())
   }
+
+  const triggerCall = ()=>{
+    const args = {
+      number: '+918530880988', // Use commas to add time between digits.
+      prompt: false,
+      skipCanOpen: true 
+    }
+    call(args).catch(console.error)
+  }
+
+  
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
       {/* map view  */}
@@ -31,14 +43,14 @@ const Delivery = () => {
       <MapView
         style={{flex: 1, width: '100%', height: '100%'}}
         initialRegion={{
-          latitude: resturant.lat,
-          longitude: resturant.lng,
-          latitudeDelta: 0.01,
-          longitudeDelta: 0.01,
+          latitude: 18.963577,
+            longitude: 72.818344,
+            latitudeDelta: 0.015,
+            longitudeDelta: 0.0121,
         }}
         mapType="standard"
       />
-      <Marker
+      {/* <Marker
         coordinate={{
           latitude: resturant.lat,
           longitude: resturant.lng,
@@ -46,7 +58,18 @@ const Delivery = () => {
         title={resturant.title}
         description={resturant.description}
         pinColor={themeColors.bgColor(1)}
-      />
+      /> */}
+       <Marker 
+            coordinate={{
+              latitude: 18.963577,
+              longitude: 72.818344,
+            }}
+            image={require('../assets/icons/xx.png')}
+            title="Test Title"
+            description="This is the test description"
+          >
+            <Text>dlksjg;lskdjf</Text>
+          </Marker>
       <MapView />
       <View
         style={{
@@ -132,7 +155,7 @@ const Delivery = () => {
                   padding: 8,
                   borderRadius: 50,
                   marginRight: 10,
-                }}>
+                }} onPress={()=>triggerCall()}>
                 <Image
                   tintColor={themeColors.bgColor(1)}
                   source={require('../assets/icons/call.png')}
